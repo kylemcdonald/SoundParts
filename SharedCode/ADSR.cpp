@@ -1,3 +1,4 @@
+/* Copyright 2017 Kyle McDonald */
 #include "ADSR.h"
 
 float remap(const float& value, const float& istart, const float& istop, const float& ostart, const float& ostop) {

@@ -1,3 +1,4 @@
+/* Copyright 2017 Kyle McDonald */
 #include "ofMain.h"
 #include "KeycodeToMidi.h"
 #include "NoteScheduler.h"

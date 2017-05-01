@@ -1,3 +1,4 @@
+/* Copyright 2017 Kyle McDonald */
 #include "KeycodeToMidi.h"
 #include "MidiUtils.h"
 

@@ -1,3 +1,4 @@
+/* Copyright 2017 Kyle McDonald */
 #pragma once
 
 /// Get the frequency in Hertz of a MIDI note.

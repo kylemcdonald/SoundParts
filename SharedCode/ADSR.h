@@ -1,3 +1,4 @@
+/* Copyright 2017 Kyle McDonald */
 #pragma once
 
 class ADSR {
