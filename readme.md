@@ -1,3 +1,3 @@
 # SoundParts
 
-A collection of C++ code for working with sound, plus examples using [openFrameworks](http://openframeworks.cc/).
+Collection of classes for working with sound in C++, plus examples using [openFrameworks](http://openframeworks.cc/).
