@@ -82,7 +82,7 @@ protected:
     std::vector<NoteQueue> queues;
     
 public:
-    void setup(int minNote=0, int maxNote=127) {
+    void setup(int minNote=0, int maxNote=128) {
         this->minNote = minNote;
         this->maxNote = maxNote;
         queues.resize(maxNote - minNote);
