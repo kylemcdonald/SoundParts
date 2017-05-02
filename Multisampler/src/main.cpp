@@ -5,7 +5,7 @@
 
 class ofApp : public ofBaseApp {
 public:
-    int octave = 5;
+    int octave = 4;
     ofTrueTypeFont smallFont, bigFont;
     Multisampler synth;
     ofSoundStream ss;

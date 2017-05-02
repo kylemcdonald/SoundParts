@@ -18,17 +18,17 @@ int clampMidiNote(int note) {
 }
 
 int clampMidiOctave(int octave) {
-    if(octave < 0) {
-        return 0;
+    if(octave < -1) {
+        return -1;
     }
-    if(octave > 10) {
-        return 10;
+    if(octave > 9) {
+        return 9;
     }
     return octave;
 }
 
 int keyAndOctaveToMidiNote(int key, int octave) {
     octave = clampMidiOctave(octave);
-    int note = 12 * octave + key;
+    int note = 12 * (octave + 1) + key;
     return clampMidiNote(note);
 }
