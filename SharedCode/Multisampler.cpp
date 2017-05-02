@@ -105,7 +105,7 @@ void Multisampler::audio_loop(std::vector<float>& audio, unsigned int samplerate
             float i = i_start;
             
             for(auto& sample : audio) {
-                if(i+1 > cols) {
+                if(i+1 >= cols) {
                     break;
                 }
                 
