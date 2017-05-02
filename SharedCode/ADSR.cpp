@@ -31,7 +31,7 @@ float ADSR::get_envelope(float time, float noteoff, float length, bool* done) {
 
 // normalized to length
 float ADSR::get_envelope(float time, float noteoff, bool* done) {
-    *done = false;
+    *done = false; // this could be removed if necessary
     if(noteoff > 0) { // release (post-noteoff)
         float end = noteoff + lim.release;
         if(end > 1) end = 1;

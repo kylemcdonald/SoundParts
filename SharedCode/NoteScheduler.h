@@ -13,10 +13,12 @@ public:
     unsigned int source = 0;
     unsigned int time = 0;
     unsigned int noteoff = 0;
+    unsigned int offset = 0;
     
-    Note(int source=0, float rate=1)
+    Note(int source=0, float rate=1, unsigned int offset=0)
     :source(source)
-    ,rate(rate) {
+    ,rate(rate)
+    ,offset(offset) {
     }
     
     /// Called when the note has been released.
@@ -47,7 +49,7 @@ private:
     std::deque<Note> queue;
     
 public:
-    void on(const Note& note) {
+    void on(const Note&& note) {
         queue.push_front(note);
     }
     void off() {
@@ -75,6 +77,8 @@ public:
 class NoteQueueCollection {
 private:
     int minNote, maxNote;
+    
+protected:
     std::vector<NoteQueue> queues;
     
 public:
@@ -88,12 +92,12 @@ public:
             queue.clear_done();
         }
     }
-    void on(int note, int source, float rate=1) {
+    void on(int note, int source, float rate=1, unsigned int offset=0) {
         if(note < minNote || note >= maxNote) {
             return;
         }
         int i = note - minNote;
-        queues[i].on(Note(source, rate));
+        queues[i].on(Note(source, rate, offset));
     }
     void off(int note) {
         if(note < minNote || note >= maxNote) {
