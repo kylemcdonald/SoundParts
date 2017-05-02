@@ -6,7 +6,7 @@
 class ofApp : public ofBaseApp {
 public:
     ofxPanel gui;
-    ofxFloatSlider a, d, s, r;
+    ofxFloatSlider a, d, s, r, off;
     
     ADSR adsr;
     
@@ -20,6 +20,7 @@ public:
         gui.add(d.setup("Decay", 0.25, 0, 1));
         gui.add(s.setup("Sustain", 0.75, 0, 1));
         gui.add(r.setup("Release", 0.25, 0, 1));
+        gui.add(off.setup("Note Off", 0, 0, 1));
     }
     void update() {
         adsr.set_attack(a);
@@ -38,9 +39,10 @@ public:
         ofBeginShape();
         bool prevdone = false;
         float length = 3 * w / 4;
+        float noteoff = off * length;
         for(int i = 0; i < w; i++) {
             bool done;
-            float env = adsr.get_envelope(i, 0, length, &done);
+            float env = adsr.get_envelope(i, i < noteoff ? 0 : noteoff, length, &done);
             if(done != prevdone) {
                 ofDrawLine(i, 0, i, ofGetHeight());
             }
@@ -48,6 +50,9 @@ public:
             ofVertex(i, env);
         }
         ofEndShape();
+        if(off > 0) {
+            ofDrawLine(noteoff, 0, noteoff, h);
+        }
     }
 };
 

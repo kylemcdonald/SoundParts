@@ -32,12 +32,16 @@ float ADSR::get_envelope(float time, float noteoff, float length, bool* done) {
 // normalized to length
 float ADSR::get_envelope(float time, float noteoff, bool* done) {
     *done = false;
-    if(noteoff > 0) { // release (noteoff)
-        if((time - noteoff) >= lim.release) { // done
+    if(noteoff > 0) { // release (post-noteoff)
+        float end = noteoff + lim.release;
+        if(end > 1) end = 1;
+        if(time >= end) { // done
             *done = true;
             return 0;
         }
-        return sustain * (time - noteoff / lim.release); // releasing
+        // making a second call isn't efficient, but it is correct
+        float peak = get_envelope(noteoff, 0, done);
+        return remap(time, noteoff, end, peak, 0); // releasing
     }
     if(time <= lim.attack) { // attack
         return time / lim.attack;
