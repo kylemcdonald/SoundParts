@@ -19,10 +19,15 @@ public:
     ,rate(rate) {
     }
     
+    /// Called when the note has been released.
     void off() {
         noteoff = time;
+    }
+    /// Called when the note is no longer playing.
+    void set_done() {
         done = true;
     }
+    /// True when the note is no longer needed.
     bool is_done() const {
         return done;
     }
@@ -46,6 +51,12 @@ public:
         queue.push_front(note);
     }
     void off() {
+        if(queue.empty()) {
+            // this happens when a note has been removed
+            // after playing out, but the key was never lifted
+            // until now
+            return;
+        }
         queue.front().off();
     }
     void clear_done() {
