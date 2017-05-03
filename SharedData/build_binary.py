@@ -1,5 +1,5 @@
 import argparse
-from os.path import basename, splitext
+from os.path import basename, splitext, normpath
 
 import numpy as np
 from scipy.io import wavfile
@@ -10,6 +10,7 @@ parser = argparse.ArgumentParser(
     description='Convert folder of samples into binary files.')
 parser.add_argument('-i', '--input_dir', type=str, default='samples')
 args = parser.parse_args()
+args.input_dir = normpath(args.input_dir)
 
 def load_audio(fn):
 	base, ext = splitext(fn)

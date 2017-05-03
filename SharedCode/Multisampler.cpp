@@ -17,7 +17,7 @@ uint64_t get_time_ns() {
 // Or only compute the pitches once.
 /// Input: vector of N (note, index) pairs
 /// Output: vector of 128 (index, rate) pairs
-std::vector<std::pair<int, float>> buildMultisampleLookup(const std::vector<std::pair<int, int>>& centers) {
+std::vector<std::pair<int, float>> Multisampler::buildMultisampleLookup(const std::vector<std::pair<int, int>>& centers) {
     std::vector<std::pair<int, float>> lookup(128);
     for(int i = 0; i < 128; i++) {
         int nearestDistance = -1;
@@ -43,19 +43,26 @@ void Multisampler::setup(int rows, int cols, int samplerate) {
     NoteQueueCollection::setup();
 }
 
-void Multisampler::load(std::string filename) {
+void Multisampler::load_audio(std::string filename) {
     auto start = get_time_ms();
-    sources.load(filename + ".audio.bin", nrows, ncols);
+    sources.load(filename, nrows, ncols);
     auto stop = get_time_ms();
     std::cout << "load time: " << (stop - start) << "ms" << std::endl;
     clear();
-    
-    metadata.load(filename + ".meta.bin", nrows, 1);
+}
+
+void Multisampler::load_metadata(std::string filename) {
+    metadata.load(filename, nrows, 1);
     std::vector<std::pair<int, int>> centers;
-    for(int i = 0; i < metadata.rows(); i++) {
+    for(int i = 0; i < nrows; i++) {
         centers.emplace_back(metadata.get_element(i, 0), i);
     }
     lookup = buildMultisampleLookup(centers);
+}
+
+void Multisampler::load(std::string filename) {
+    load_audio(filename + ".audio.bin");
+    load_metadata(filename + ".meta.bin");
 }
 
 size_t Multisampler::rows() const {

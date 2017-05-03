@@ -20,6 +20,10 @@ protected:
     BinaryDataSync<float> metadata;
     std::vector<std::pair<int, float>> lookup;
     
+    virtual void load_audio(std::string filename);
+    virtual void load_metadata(std::string filename);
+    static std::vector<std::pair<int, float>> buildMultisampleLookup(const std::vector<std::pair<int, int>>& centers);
+    
 public:
     void setup(int rows, int cols, int samplerate);
     void load(std::string filename);
