@@ -1,3 +1,5 @@
+*.pyc
+
 # don't push project files
 *.cbp
 *.sln
