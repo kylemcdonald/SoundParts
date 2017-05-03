@@ -6,6 +6,12 @@
 #include "NoteScheduler.h"
 #include "BinaryDataSync.h"
 
+//#define USE_ASYNC
+
+#ifdef USE_ASYNC
+#include "BinaryDataAsync.h"
+#endif
+
 class Multisampler : public NoteQueueCollection, public ADSR {
 private:
     size_t nrows, ncols;
@@ -16,7 +22,11 @@ private:
     float average_time_used = 0;
     
 protected:
+#ifdef USE_ASYNC
+    BinaryDataAsync<int16_t> sources;
+#else
     BinaryDataSync<int16_t> sources;
+#endif
     BinaryDataSync<float> metadata;
     std::vector<std::pair<int, float>> lookup;
     

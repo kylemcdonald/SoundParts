@@ -48,6 +48,9 @@ public:
         ncols = 0;
         return 0;
     }
+    T* operator[](size_t row) {
+        return get_row(row);
+    }
     T* get_row(size_t row) {
         return &data[row * ncols];
     }
