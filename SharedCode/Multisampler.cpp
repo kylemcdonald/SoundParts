@@ -48,7 +48,6 @@ void Multisampler::load_audio(std::string filename) {
     sources.load(filename, nrows, ncols);
     auto stop = get_time_ms();
     std::cout << "load time: " << (stop - start) << "ms" << std::endl;
-    clear();
 }
 
 void Multisampler::load_metadata(std::string filename) {
@@ -61,6 +60,7 @@ void Multisampler::load_metadata(std::string filename) {
 }
 
 void Multisampler::load(std::string filename) {
+    clear();
     load_audio(filename + ".audio.bin");
     load_metadata(filename + ".meta.bin");
 }
