@@ -38,7 +38,9 @@ public:
         return 0;
     }
     int unload() {
-        if(data == NULL) return;
+        if(data == NULL) {
+            return 0;
+        }
         if(munmap(data, nbytes) != 0) {
             std::cerr << "Couldn't unmap." << std::endl;
             return -1;
