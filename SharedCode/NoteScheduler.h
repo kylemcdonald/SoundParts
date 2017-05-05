@@ -3,6 +3,7 @@
 
 #include <deque>
 #include <vector>
+#include <algorithm>
 
 class Note {
 private:
