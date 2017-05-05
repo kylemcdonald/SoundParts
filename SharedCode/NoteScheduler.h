@@ -10,11 +10,11 @@ private:
     bool done = false;
     
 public:
-    float rate = 1;
-    unsigned int source = 0;
+    unsigned int source;
+    float rate;
+    unsigned int offset;
     unsigned int time = 0;
     unsigned int noteoff = 0;
-    unsigned int offset = 0;
     
     Note(int source=0, float rate=1, unsigned int offset=0)
     :source(source)

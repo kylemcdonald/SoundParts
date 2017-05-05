@@ -12,12 +12,17 @@ private:
     size_t ncols = 0;
 public:
     void load(std::string filename, size_t rows, size_t cols) {
-        this->nrows = rows;
-        this->ncols = cols;
+        nrows = rows;
+        ncols = cols;
         size_t n = rows * cols;
         data.resize(n);
         FILE * file = fopen(filename.c_str() , "rb");
-        fread(&data[0], sizeof(T), n, file);
+        size_t result = fread(&data[0], sizeof(T), n, file);
+        if(result == 0) {
+            nrows = 0;
+            ncols = 0;
+            data.resize(0);
+        }
         fclose(file);
     }
     T* operator[](size_t row) {

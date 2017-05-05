@@ -21,7 +21,7 @@ std::vector<std::pair<int, float>> Multisampler::buildMultisampleLookup(const st
     std::vector<std::pair<int, float>> lookup(128);
     for(int i = 0; i < 128; i++) {
         int nearestDistance = -1;
-        for(int j = 0; j < centers.size(); j++) {
+        for(size_t j = 0; j < centers.size(); j++) {
             int note = centers[j].first;
             int curDistance = std::abs(i - note);
             if(nearestDistance == -1 || curDistance < nearestDistance) {
@@ -53,7 +53,7 @@ void Multisampler::load_audio(std::string filename) {
 void Multisampler::load_metadata(std::string filename) {
     metadata.load(filename, nrows, 1);
     std::vector<std::pair<int, int>> centers;
-    for(int i = 0; i < nrows; i++) {
+    for(size_t i = 0; i < nrows; i++) {
         centers.emplace_back(metadata.get_element(i, 0), i);
     }
     lookup = buildMultisampleLookup(centers);
