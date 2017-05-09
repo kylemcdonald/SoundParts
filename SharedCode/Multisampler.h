@@ -6,7 +6,7 @@
 #include "NoteScheduler.h"
 #include "BinaryDataSync.h"
 
-//#define USE_ASYNC
+#define USE_ASYNC
 
 #ifdef USE_ASYNC
 #include "BinaryDataAsync.h"
@@ -17,6 +17,7 @@ private:
     size_t nrows, ncols;
     unsigned int samplerate;
     float position = 0;
+    float volume = 1;
     uint64_t previous_time = 0;
     float average_time_available = 0;
     float average_time_used = 0;
@@ -41,6 +42,7 @@ public:
     size_t cols() const;
     void on(int note);
     void set_position(float position);
+    void set_volume(float volume);
     void audio_loop(std::vector<float>& audio, unsigned int samplerate);
     float get_performance() const;
 };

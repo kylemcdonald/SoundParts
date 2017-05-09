@@ -85,6 +85,12 @@ void Multisampler::set_position(float position) {
     this->position = position;
 }
 
+void Multisampler::set_volume(float volume) {
+    if(volume < 0) volume = 0;
+    if(volume > 1) volume = 1;
+    this->volume = volume;
+}
+
 void Multisampler::audio_loop(std::vector<float>& audio, unsigned int samplerate) {
     auto start = get_time_ns();
     std::fill(audio.begin(), audio.end(), 0);
@@ -129,6 +135,11 @@ void Multisampler::audio_loop(std::vector<float>& audio, unsigned int samplerate
             
             if(done) {
                 note.set_done();
+            }
+        }
+        if(volume < 1) {
+            for(auto& sample : audio) {
+                sample *= volume;
             }
         }
     }
