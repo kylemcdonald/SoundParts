@@ -140,7 +140,7 @@ void Multisampler::audio_loop(std::vector<float>& audio, unsigned int samplerate
     }
     if(volume < 1) {
         for(auto& sample : audio) {
-            sample = volume;
+            sample *= volume;
         }
     }
     clear_done();
