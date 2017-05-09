@@ -17,7 +17,7 @@ private:
     size_t nrows, ncols;
     unsigned int samplerate;
     float position = 0;
-    float volume = 1;
+    float current_volume = 1, next_volume = 1;
     uint64_t previous_time = 0;
     float average_time_available = 0;
     float average_time_used = 0;

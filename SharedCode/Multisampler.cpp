@@ -88,20 +88,21 @@ void Multisampler::set_position(float position) {
 void Multisampler::set_volume(float volume) {
     if(volume < 0) volume = 0;
     if(volume > 1) volume = 1;
-    this->volume = volume;
+    if(volume != next_volume) {
+        next_volume = volume;
+    }
 }
 
 void Multisampler::audio_loop(std::vector<float>& audio, unsigned int samplerate) {
     auto start = get_time_ns();
     std::fill(audio.begin(), audio.end(), 0);
+    size_t samples = audio.size();
     size_t cols = sources.cols();
     float samplerate_ratio = float(this->samplerate) / samplerate;
     float normalization = 1./std::numeric_limits<int16_t>::max();
     for(auto& queue : queues) {
         for(auto& note : queue.get()) {
             const auto& source = sources[note.source];
-            
-            size_t samples = audio.size();
             float start_time = note.time;
             float stop_time = start_time + samples;
             
@@ -138,11 +139,17 @@ void Multisampler::audio_loop(std::vector<float>& audio, unsigned int samplerate
             }
         }
     }
-    if(volume < 1) {
-        for(auto& sample : audio) {
-            sample *= volume;
-        }
+    
+    float volume_start = current_volume;
+    float volume_stop = next_volume;
+    float volume_step = (volume_stop - volume_start) / samples;
+    float volume = volume_start;
+    for(auto& sample : audio) {
+        sample *= volume;
+        volume += volume_step;
     }
+    current_volume = volume;
+    
     clear_done();
     auto stop = get_time_ns();
     if(previous_time > 0) {
