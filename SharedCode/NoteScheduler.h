@@ -15,11 +15,13 @@ public:
     unsigned int offset;
     unsigned int time = 0;
     unsigned int noteoff = 0;
+    float volume = 1;
     
-    Note(int source=0, float rate=1, unsigned int offset=0)
+    Note(int source=0, float rate=1, unsigned int offset=0, float volume=1)
     :source(source)
     ,rate(rate)
-    ,offset(offset) {
+    ,offset(offset)
+    ,volume(volume) {
     }
     
     /// Called when the note has been released.
@@ -93,12 +95,12 @@ public:
             queue.clear_done();
         }
     }
-    void on(int note, int source, float rate=1, unsigned int offset=0) {
+    void on(int note, int source, float rate=1, unsigned int offset=0, float volume=1) {
         if(note < minNote || note >= maxNote) {
             return;
         }
         int i = note - minNote;
-        queues[i].on(Note(source, rate, offset));
+        queues[i].on(Note(source, rate, offset, volume));
     }
     void off(int note) {
         if(note < minNote || note >= maxNote) {

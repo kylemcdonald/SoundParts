@@ -83,8 +83,10 @@ public:
     }
     void keyPressed(int key) {
         int note = keycodeToMidiNote(key, octave);
+        float volume = 1;
+//        volume = ofMap(sin(ofGetElapsedTimef()), -1, 1, 0, 1);
         if(note > -1) {
-            synth.on(note);
+            synth.on(note, volume);
         }
         if(key == 'z') {
             octave--;

@@ -40,7 +40,7 @@ public:
     void load(std::string filename);
     size_t rows() const;
     size_t cols() const;
-    void on(int note);
+    void on(int note, float volume=1);
     void set_position(float position);
     void set_volume(float volume);
     void audio_loop(std::vector<float>& audio, unsigned int samplerate);

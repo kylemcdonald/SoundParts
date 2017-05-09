@@ -73,10 +73,10 @@ size_t Multisampler::cols() const {
     return ncols;
 }
 
-void Multisampler::on(int note) {
+void Multisampler::on(int note, float volume) {
     std::pair<int, float>& settings = lookup[note];
     unsigned int offset = position * ncols;
-    NoteQueueCollection::on(note, settings.first, settings.second, offset);
+    NoteQueueCollection::on(note, settings.first, settings.second, offset, volume);
 }
 
 void Multisampler::set_position(float position) {
@@ -108,8 +108,8 @@ void Multisampler::audio_loop(std::vector<float>& audio, unsigned int samplerate
             
             bool done = false;
             unsigned int length = cols - note.offset;
-            float amp_start = normalization * get_envelope(start_time, note.noteoff, length, &done);
-            float amp_stop = normalization * get_envelope(stop_time, note.noteoff, length, &done);
+            float amp_start = normalization * get_envelope(start_time, note.noteoff, length, &done) * note.volume;
+            float amp_stop = normalization * get_envelope(stop_time, note.noteoff, length, &done) * note.volume;
             float amp_step = (amp_stop - amp_start) / samples;
             float amp = amp_start;
             
