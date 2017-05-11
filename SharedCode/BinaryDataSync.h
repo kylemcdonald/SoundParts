@@ -1,6 +1,7 @@
 /* Copyright 2017 Kyle McDonald */
 #pragma once
 
+#include <iostream>
 #include <string>
 #include <vector>
 
@@ -16,9 +17,14 @@ public:
         ncols = cols;
         size_t n = rows * cols;
         data.resize(n);
-        FILE * file = fopen(filename.c_str() , "rb");
+        FILE* file = fopen(filename.c_str() , "rb");
+        if(file == NULL) {
+            std::cerr << "Couldn't open file " << filename << std::endl;
+            return;
+        }
         size_t result = fread(&data[0], sizeof(T), n, file);
         if(result == 0) {
+            std::cerr << "Couldn't read file " << filename << std::endl;
             nrows = 0;
             ncols = 0;
             data.resize(0);

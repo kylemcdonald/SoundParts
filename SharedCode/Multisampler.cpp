@@ -3,6 +3,8 @@
 #include <cmath>
 #include <iostream>
 #include <chrono>
+#include <fstream>
+#include <sstream>
 
 uint64_t get_time_ms() {
     using namespace std::chrono;
@@ -13,22 +15,20 @@ uint64_t get_time_ns() {
     return duration_cast<nanoseconds>(system_clock::now().time_since_epoch()).count();
 }
 
-// This could be optimized by sorting the input then stepping.
-// Or only compute the pitches once.
-/// Input: vector of N (note, index) pairs
+/// Input: vector of N note values
 /// Output: vector of 128 (index, rate) pairs
-std::vector<std::pair<int, float>> Multisampler::buildMultisampleLookup(const std::vector<std::pair<int, int>>& centers) {
+std::vector<std::pair<int, float>> Multisampler::buildMultisampleLookup(const std::vector<int>& centers) {
     std::vector<std::pair<int, float>> lookup(128);
     for(int i = 0; i < 128; i++) {
         int nearestDistance = -1;
         for(size_t j = 0; j < centers.size(); j++) {
-            int note = centers[j].first;
+            int note = centers[j];
             int curDistance = std::abs(i - note);
             if(nearestDistance == -1 || curDistance < nearestDistance) {
                 nearestDistance = curDistance;
                 float target = getFrequency(i);
                 float source = getFrequency(note);
-                lookup[i].first = centers[j].second;
+                lookup[i].first = j;
                 lookup[i].second = target / source;
             }
         }
@@ -43,26 +43,30 @@ void Multisampler::setup(int rows, int cols, int samplerate) {
     NoteQueueCollection::setup();
 }
 
-void Multisampler::load_audio(std::string filename) {
-    auto start = get_time_ms();
-    sources.load(filename, nrows, ncols);
-    auto stop = get_time_ms();
-    std::cout << "load time: " << (stop - start) << "ms" << std::endl;
-}
-
-void Multisampler::load_metadata(std::string filename) {
-    metadata.load(filename, nrows, 1);
-    std::vector<std::pair<int, int>> centers;
-    for(size_t i = 0; i < nrows; i++) {
-        centers.emplace_back(metadata.get_element(i, 0), i);
-    }
-    lookup = buildMultisampleLookup(centers);
-}
-
 void Multisampler::load(std::string filename) {
     clear();
-    load_audio(filename + ".audio.bin");
-    load_metadata(filename + ".meta.bin");
+    
+    auto start = get_time_ms();
+    sources.load(filename + ".bin", nrows, ncols);
+    auto stop = get_time_ms();
+    std::cout << "load time: " << (stop - start) << "ms" << std::endl;
+    
+    std::vector<int> centers;
+    std::ifstream file;
+    file.open(filename + ".txt");
+    std::string line;
+    int pitch;
+    if(file.is_open()) {
+        while(std::getline(file, line)) {
+            std::istringstream ss(line);
+            ss >> pitch;
+            centers.push_back(pitch);
+        }
+        file.close();
+    } else {
+        std::cerr << "Unable to load " << filename << ".txt" << std::endl;
+    }
+    lookup = buildMultisampleLookup(centers);
 }
 
 size_t Multisampler::rows() const {

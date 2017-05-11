@@ -20,12 +20,12 @@ def load_audio(fn):
 		return ffmpeg_load_audio(fn, mono=True)[0]
 
 filenames = list(list_all_files(args.input_dir, ['.wav', '.mp3']))
+pitches = [int(basename(fn).split('-')[1]) for fn in filenames]
+pitches, filenames = zip(*sorted(zip(pitches, filenames)))
 samples = [load_audio(fn) for fn in filenames]
 samples = np.asarray(samples, dtype=np.int16)
-samples.tofile(args.input_dir + '.audio.bin')
+samples.tofile(args.input_dir + '.bin')
 print('Saved samples: {}'.format(samples.shape))
 
-pitches = [int(basename(fn).split('-')[1]) for fn in filenames]
-pitches = np.asarray(pitches, dtype=np.float32)
-pitches.tofile(args.input_dir + '.meta.bin')
-print('Saved pitches: {}'.format(pitches))
+np.savetxt(args.input_dir + '.txt', pitches, fmt='%d')
+print('Saved pitches: {}'.format(len(pitches)))

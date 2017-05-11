@@ -25,8 +25,12 @@ public:
         size_t n = rows * cols;
         nbytes = n * sizeof(T);
         int fd = open(filename.c_str(), O_RDONLY);
+        if(fd < 0) {
+            std::cerr << "Couldn't open file " << filename << std::endl;
+            return -1;
+        }
         data = reinterpret_cast<T*>(mmap(NULL, nbytes, PROT_READ, MAP_FILE | MAP_SHARED, fd, 0));
-        if (data == MAP_FAILED) {
+        if(data == MAP_FAILED) {
             std::cerr << "Couldn't map " << filename << std::endl;
             return -1;
         }
