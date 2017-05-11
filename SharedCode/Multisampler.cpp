@@ -2,18 +2,8 @@
 #include "MidiUtils.h"
 #include <cmath>
 #include <iostream>
-#include <chrono>
 #include <fstream>
 #include <sstream>
-
-uint64_t get_time_ms() {
-    using namespace std::chrono;
-    return duration_cast<milliseconds>(system_clock::now().time_since_epoch()).count();
-}
-uint64_t get_time_ns() {
-    using namespace std::chrono;
-    return duration_cast<nanoseconds>(system_clock::now().time_since_epoch()).count();
-}
 
 /// Input: vector of N note values
 /// Output: vector of 128 (index, rate) pairs

@@ -32,3 +32,13 @@ int keyAndOctaveToMidiNote(int key, int octave) {
     int note = 12 * (octave + 1) + key;
     return clampMidiNote(note);
 }
+
+uint64_t get_time_ms() {
+    using namespace std::chrono;
+    return duration_cast<milliseconds>(system_clock::now().time_since_epoch()).count();
+}
+
+uint64_t get_time_ns() {
+    using namespace std::chrono;
+    return duration_cast<nanoseconds>(system_clock::now().time_since_epoch()).count();
+}

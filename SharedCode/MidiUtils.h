@@ -1,5 +1,6 @@
 /* Copyright 2017 Kyle McDonald */
 #pragma once
+#include <chrono>
 
 /// Get the frequency in Hertz of a MIDI note.
 /// A4 = 69 = 440Hz
@@ -16,3 +17,7 @@ int clampMidiOctave(int octave);
 /// Examples: 0, 4 => 60 ; 0, -1 => 0
 /// Middle C = C4
 int keyAndOctaveToMidiNote(int key, int octave);
+
+uint64_t get_time_ms();
+
+uint64_t get_time_ns();
